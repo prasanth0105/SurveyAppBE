@@ -4,15 +4,13 @@ const Schema= mongoose.Schema;
 const RoleSchema = new Schema({
     role:{
         type:String,
-        required:[true,"Role must be provided"]
+        required:[true,"Role must be provided"],
+        unique: true
     },
     role_id:{
         type:Number,
+        unique:true,
         required:[true,"Role_ID must be provided"]
-    },
-    perm_id:{
-        type:Number,
-        required:true
     }
 });
 

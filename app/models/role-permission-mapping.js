@@ -1,16 +1,14 @@
 const mongoose= require('mongoose');
 const Schema= mongoose.Schema;
 
-const MapSchema = new Schema({
+const RolePermSchema = new Schema({
     role_id:{
-        type:Number,
-        required:[true,"Role_ID must be provided"]
+        type:Number
     },
     perm_id:{
-        type:Number,
-        required:[true,"Permission_ID must be provided"]
+        type:Number
     }
 });
 
-const Map= mongoose.model('map',MapSchema);
-module.exports=Map;
+const RolePerm= mongoose.model('roleperm',RolePermSchema);
+module.exports=RolePerm;
