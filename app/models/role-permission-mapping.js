@@ -3,10 +3,12 @@ const Schema= mongoose.Schema;
 
 const RolePermSchema = new Schema({
     role_id:{
-        type:Number
+        type:Number,
+        required:[true,"Role_ID must be provided"]
     },
     perm_id:{
-        type:Number
+        type:Number,
+        required:[true,"Permission_ID must be provided"]
     }
 });
 

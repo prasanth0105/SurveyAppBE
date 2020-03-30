@@ -1,5 +1,6 @@
 const express= require('express');
 const router=express.Router();
+const mongoose= require('mongoose');
 const Role= require('../models/roleschema');
 const Permission= require('../models/permissionschema');
 const RolePerm= require('../models/role-permission-mapping');
@@ -9,21 +10,28 @@ router.get('/',function(req,res,next){
         res.send(roles);
     });
 });
-router.post('/:perm_id',function(req,res,next){
-    Role.findOne({role_id:req.body.role_id},function(role){
-        if(role){
-            console.log("role_id already exists");
-        }
-        else{
-            Role.create(req.body).then(function(role){
-                res.send(role);
-            })
-        }
-    });
-    RolePerm.create({"role_id":req.body.role_id,"perm_id":req.params.perm_id}).then(function(maps){
-            res.send(maps);
-            console.log("Mapped");
-        });    
+router.post('/',async function(req,res,next){
+    const session= await mongoose.startSession();
+    session.startTransaction();
+    try{
+        Role.create({"role":req.body.role,"role_id":req.body.role_id}).then(function(roles,err){
+            if(err){
+                throw new Error('Role creation failed');
+            }
+            else{
+                res.send(roles);
+            }
+        });
+    for(var i in req.body.perm_id){
+        RolePerm.insertMany({"role_id":req.body.role_id,"perm_id":req.body.perm_id[i]});
+    }
+        await session.commitTransaction();
+        session.endSession();
+    }catch (error){
+        await session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
 });
 router.put('/:id',function(req,res,next){
     Role.findOneAndUpdate({role_id:req.params.id},req.body).then(function(){
@@ -42,13 +50,13 @@ router.get('/permissions',function(req,res,next){
         res.send(permissions);
     });
 });
-router.get('/roleperm',function(req,res,next){
+router.get('/roleperms',function(req,res,next){
     RolePerm.find().then(function(maps){
         res.send(maps);
     });
 });
-router.delete('/roleperm/:id',function(req,res,next){
-    RolePerm.findOneAndRemove({perm_id:req.params.id}).then(function(map){
+router.delete('/roleperms/:id',function(req,res,next){
+    RolePerm.findOneAndRemove({role_id:req.params.id}).then(function(map){
         res.send(map);
     });
 });
