@@ -43,7 +43,7 @@ newAnswer = async (req, res, next) => {
   }
 }
 
-viewSurvey = async (req, res, next) => {
+viewSurvey =       async (req, res, next) => {
   try{
     res.json(await Survey.find({ _id: req.params.surId })
     .populate({
