@@ -1,14 +1,16 @@
-const { Given, When, Then, setDefaultTimeout } = require("cucumber");
+/* eslint-disable func-names */
+const { Given, When, Then } = require("cucumber");
 const assert = require("assert");
 const fetch = require("node-fetch");
 
-let API = "http://localhost:8080";
+const API = "http://localhost:8080";
+let body;
 
 When("I make a GET request to {stringInDoubleQuotes}", function (endPoint) {
   return fetch(API + endPoint)
     .then((res) => res.json())
-    .then(function (body) {
-      this.body = body;
+    .then(function (data) {
+      body = data;
     });
 });
 Then(/^For ([^"]*) response property ([^"]*) should be ([^"]*)$/, function (
@@ -27,8 +29,8 @@ When(
   function (endPoint) {
     return fetch(API + endPoint + "/" + this.id)
       .then((res) => res.json())
-      .then(function (body) {
-        this.body = body;
+      .then(function (data) {
+        body = data;
       });
   }
 );

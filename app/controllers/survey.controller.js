@@ -7,7 +7,7 @@ var Answer = require("../models/db.answers.model");
 
 const joi = require("../middlewares/joi");
 
-viewSurveys =              async (req, res, next) => {
+const viewSurveys = async (req, res, next) => {
   try {
     res.json(await Survey.find({}));
   } catch (err) {
@@ -15,7 +15,7 @@ viewSurveys =              async (req, res, next) => {
   }
 };
 
-newSurvey = async (req, res, next) => {
+const newSurvey = async (req, res, next) => {
   try {
     res.json(await Survey.create(req.body));
   } catch (err) {
@@ -23,7 +23,7 @@ newSurvey = async (req, res, next) => {
   }
 };
 
-newQuestion = async (req, res, next) => {
+const newQuestion = async (req, res, next) => {
   try {
     const dbQuestion = await Question.create(req.body);
     const surveyUpdate = await Survey.findOneAndUpdate(
@@ -37,7 +37,7 @@ newQuestion = async (req, res, next) => {
   }
 };
 
-newAnswer = async (req, res, next) => {
+const newAnswer = async (req, res, next) => {
   try {
     const dbAnswer = await Answer.create(req.body);
     const questionUpdate = await Question.findOneAndUpdate(
@@ -51,7 +51,7 @@ newAnswer = async (req, res, next) => {
   }
 };
 
-viewSurvey = async (req, res, next) => {
+const viewSurvey = async (req, res, next) => {
   try {
     res.json(
       await Survey.find({ _id: req.params.surId }).populate({
@@ -60,9 +60,9 @@ viewSurvey = async (req, res, next) => {
         populate: [
           {
             path: "answers",
-            select: ["option_type", "option_label"],
-          },
-        ],
+            select: ["option_type", "option_label"]
+          }
+        ]
       })
     );
   } catch (err) {

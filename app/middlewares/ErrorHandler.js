@@ -4,7 +4,7 @@ module.exports = (err, res, next) => {
     err.message = "Database Error";
   }
   res.status(err.code).json({
-    message: err.message,
+    message: err.message
   });
   next();
 };
