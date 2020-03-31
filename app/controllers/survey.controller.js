@@ -5,59 +5,71 @@ var Survey = require("../models/db.survey.model");
 var Question = require("../models/db.questions.answers.model");
 var Answer = require("../models/db.answers.model");
 
-router.get("/surveys", function(req,res,next) {
-    Survey.find({})
-    .then(function(dbSurvey) {
-      res.json(dbSurvey);
-    })
-    .catch();
-});
+const joi = require('../middlewares/joi');
 
-router.post("/surveys", function(req, res) {
-    Survey.create(req.body)
-    .then(function(dbSurvey) {
-    res.json(dbSurvey);
-    })
-    .catch();
-});
+viewSurveys = async (req, res, next) => {
+  try{
+    res.json(await Survey.find({}));
+  }catch(err) {
+    next(err);
+  }
+}
 
-router.post("/surveys/:surId", function(req, res) {
-    Question.create(req.body)
-      .then(function(dbQuestion) {
-        return Survey.findOneAndUpdate({ _id: req.params.surId }, {$push: {question_set: dbQuestion._id}}, { new: true });
-      })
-      .then(function(dbSurvey) {
-        res.json(dbSurvey);
-      })
-      .catch();
-});
+newSurvey = async (req, res, next) => {
+  try{
+    res.json(await Survey.create(req.body));
+  }catch(err) {
+    next(err);
+  }
+}
 
-router.post("/surveys/:surId/:qId", function(req, res) {
-    Answer.create(req.body)
-      .then(function(dbAnswer) {
-        return Question.findOneAndUpdate({ _id: req.params.qId }, {$push: {answers: dbAnswer._id}}, { new: true });
-      })
-      .then(function(dbQuest) {
-        res.json(dbQuest);
-      })
-      .catch();
-});
+newQuestion = async (req, res, next) => {
+  try{
+    const dbQuestion = await Question.create(req.body);
+    const surveyUpdate = await Survey.findOneAndUpdate({ _id: req.params.surId }, {$push: {question_set: dbQuestion._id}}, { new: true });
+    res.json(surveyUpdate); 
+  }catch(err) {
+    next(err);
+  }
+}
 
-router.get("/surveys/:surId", function(req, res) {
-    Survey.find({ _id: req.params.surId })
-      .populate({
-        path: 'question_set',
-        select: ['answers','question'],
-        populate: [{
-          path: 'answers',
-          select:['option_type','option_label']
-        }]
-      })
-      .then(function(dbSurvey) {
-        res.json(dbSurvey);
-      })
-      .catch();
-});
+newAnswer = async (req, res, next) => {
+  try{
+    const dbAnswer = await Answer.create(req.body);
+    const questionUpdate = await Question.findOneAndUpdate({ _id: req.params.qId }, {$push: {answers: dbAnswer._id}}, { new: true });
+    res.json(questionUpdate); 
+  }catch(err) {
+    next(err);
+  }
+}
+
+viewSurvey = async (req, res, next) => {
+  try{
+    res.json(await Survey.find({ _id: req.params.surId })
+    .populate({
+      path: 'question_set',
+      select: ['answers','question'],
+      populate: [{
+        path: 'answers',
+        select:['option_type','option_label']
+      }]
+    }));
+  }catch(err) {
+    next(err);
+  }
+}
 
 
-module.exports=router;
+router.get('/surveys', (req, res, next) => viewSurveys(req, res, next));
+
+router.post('/surveys', joi.Validator(joi.addSurvey), (req, res, next) => newSurvey(req, res, next));
+
+router.post('/surveys/:surId', joi.Validator(joi.addQuestion), (req, res, next) => newQuestion(req, res, next));
+
+router.post('/surveys/:surId/:qId', joi.Validator(joi.addAnswer), (req, res, next) => newAnswer(req, res, next));
+
+router.get('/survey/:surId', (req, res, next) => viewSurvey(req, res, next));
+
+
+
+module.exports = router;

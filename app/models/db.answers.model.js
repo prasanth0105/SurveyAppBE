@@ -11,10 +11,12 @@ const AnswerSchema = new Schema({
         ref: 'question'
     },
     option_type:{
-        type:String
+        type:String,
+        required:[true,"Should be of 'Check Box', 'Dropdown','Radio Button' or 'Text Box' ."]
     },
     option_label:{
-        type:String
+        type:String,
+        required:[true,"Require a label for every option"]
     }
 });
 
