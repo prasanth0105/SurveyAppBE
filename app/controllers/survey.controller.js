@@ -7,7 +7,7 @@ var Answer = require("../models/db.answers.model");
 
 const joi = require("../middlewares/joi");
 
-viewSurveys = async (req, res, next) => {
+viewSurveys =              async (req, res, next) => {
   try {
     res.json(await Survey.find({}));
   } catch (err) {
