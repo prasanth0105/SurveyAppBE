@@ -9,7 +9,7 @@
     "lint:fix": "eslint ./**/*.js --fix",
     "lint": "eslint ./**/*.js",
     "test": "lint-staged",
-    "prettify": "prettier src/*.js --write",
+    "prettify": "prettier /**/*.js --write",
     "pretty": "prettier --write --tab-width 4 \"./**/*.js\""
   },
   "husky": {
