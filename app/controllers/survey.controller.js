@@ -45,7 +45,7 @@ const newAnswer = async (req, res, next) => {
       { $push: { answers: dbAnswer._id } },
       { new: true }
     );
-    res.json(questionUpdate);
+    return res.json(questionUpdate);
   } catch (err) {
     next(err);
   }
