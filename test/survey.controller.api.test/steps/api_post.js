@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 const { Given, When, Then, setDefaultTimeout } = require('cucumber');
 const assert = require('assert');
 const fetch = require('node-fetch');

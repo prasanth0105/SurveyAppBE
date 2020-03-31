@@ -6,14 +6,21 @@
   "scripts": {
     "api_get": "cucumber.js.cmd test/survey.controller.api.test/features/api_get.feature -r test/survey.controller.api.test/steps/api_get.js",
     "api_post": "cucumber.js.cmd test/survey.controller.api.test/features/api_post.feature -r test/survey.controller.api.test/steps/api_post.js",
-    "lint:fix": "eslint ./*.js --fix",
-    "lint": "eslint ./*.js",
-    "test": "lint-staged"
+    "lint:fix": "eslint ./**/*.js --fix",
+    "lint": "eslint ./**/*.js",
+    "test": "lint-staged",
+    "prettify": "prettier src/*.js --write"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint"
     }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",

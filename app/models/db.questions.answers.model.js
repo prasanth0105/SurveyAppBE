@@ -9,7 +9,7 @@ const QuestionSchema = new Schema({
     },
     question:{
         type:String,
-        required:[true,"There should be question!!"]
+        required:[true,'There should be question!!']
     },
     answers:[{
         type: Schema.Types.ObjectId,

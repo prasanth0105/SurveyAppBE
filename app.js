@@ -8,7 +8,7 @@ const app = express();
 mongoose.connect('mongodb://localhost:27017/surveyApp', { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
     if (err) {
-      console.log("ERROR : 500 Can't connect to DATABASE right now");
+      console.log('ERROR : 500 Cant connect to DATABASE right now');
     } else {
       console.log('Connected to DATABASE');
     }

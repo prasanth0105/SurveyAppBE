@@ -1,9 +1,9 @@
 const express= require('express');
 const router=express.Router();
 
-var Survey = require("../models/db.survey.model");
-var Question = require("../models/db.questions.answers.model");
-var Answer = require("../models/db.answers.model");
+var Survey = require('../models/db.survey.model');
+var Question = require('../models/db.questions.answers.model');
+var Answer = require('../models/db.answers.model');
 
 const joi = require('../middlewares/joi');
 
