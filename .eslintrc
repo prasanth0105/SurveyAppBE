@@ -1,10 +1,4 @@
 {
-  "rules": {
-    "quotes": [
-      "error",
-      "single"
-    ]
-  },
   "parserOptions": {
       "ecmaVersion": 2017
   },

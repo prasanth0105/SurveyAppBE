@@ -1,10 +1,10 @@
 module.exports = (err, res, next) => {
-  if(!err.code){
-    err.code = 401;
-    err.message = 'Database Error';
-  }
+    if (!err.code) {
+        err.code = 401;
+        err.message = "Database Error";
+    }
     res.status(err.code).json({
-      message: err.message
+        message: err.message,
     });
     next();
 };
