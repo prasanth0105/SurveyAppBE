@@ -1,8 +1,13 @@
 {
   "root": true,
-  "extends": "standard",
+  "extends": "google",
+  "parser": "babel-eslint",
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+    "experimentalObjectRestSpread": true
+  }
   },
   "rules": {
     "indent": [2, 2, { "SwitchCase": 1 }],

@@ -1,13 +1,13 @@
 const express = require("express");
+// eslint-disable-next-line new-cap
 const router = express.Router();
-
-var Survey = require("../models/db.survey.model");
-var Question = require("../models/db.questions.answers.model");
-var Answer = require("../models/db.answers.model");
+const Survey = require("../models/db.survey.model");
+const Question = require("../models/db.questions.model");
+const Answer = require("../models/db.answers.model");
 
 const joi = require("../middlewares/joi");
 
-const viewSurveys = async (req, res, next) => {
+const viewSurveys = async (_req, res, next) => {
   try {
     res.json(await Survey.find({}));
   } catch (err) {
@@ -27,9 +27,9 @@ const newQuestion = async (req, res, next) => {
   try {
     const dbQuestion = await Question.create(req.body);
     const surveyUpdate = await Survey.findOneAndUpdate(
-      { _id: req.params.surId },
-      { $push: { question_set: dbQuestion._id } },
-      { new: true }
+      {_id: req.params.surId},
+      {$push: {question_set: dbQuestion._id}},
+      {new: true}
     );
     res.json(surveyUpdate);
   } catch (err) {
@@ -41,9 +41,9 @@ const newAnswer = async (req, res, next) => {
   try {
     const dbAnswer = await Answer.create(req.body);
     const questionUpdate = await Question.findOneAndUpdate(
-      { _id: req.params.qId },
-      { $push: { answers: dbAnswer._id } },
-      { new: true }
+      {_id: req.params.qId},
+      {$push: {answers: dbAnswer._id}},
+      {new: true}
     );
     return res.json(questionUpdate);
   } catch (err) {
@@ -54,7 +54,7 @@ const newAnswer = async (req, res, next) => {
 const viewSurvey = async (req, res, next) => {
   try {
     res.json(
-      await Survey.find({ _id: req.params.surId }).populate({
+      await Survey.find({_id: req.params.surId}).populate({
         path: "question_set",
         select: ["answers", "question"],
         populate: [
@@ -72,19 +72,19 @@ const viewSurvey = async (req, res, next) => {
 
 router.get("/surveys", (req, res, next) => viewSurveys(req, res, next));
 
-router.post("/surveys", joi.Validator(joi.addSurvey), (req, res, next) =>
+router.post("/surveys", joi.validator(joi.addSurvey), (req, res, next) =>
   newSurvey(req, res, next)
 );
 
 router.post(
   "/surveys/:surId",
-  joi.Validator(joi.addQuestion),
+  joi.validator(joi.addQuestion),
   (req, res, next) => newQuestion(req, res, next)
 );
 
 router.post(
   "/surveys/:surId/:qId",
-  joi.Validator(joi.addAnswer),
+  joi.validator(joi.addAnswer),
   (req, res, next) => newAnswer(req, res, next)
 );
 

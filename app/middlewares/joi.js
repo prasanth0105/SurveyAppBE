@@ -14,7 +14,7 @@ module.exports.addAnswer = Joi.object().keys({
   survey_id: Joi.string().min(24).required(),
   question_id: Joi.string().min(24).required()
 });
-module.exports.Validator = (schema) => (req, res, next) => {
+module.exports.validator = (schema) => (req, res, next) => {
   const valResult = schema.validate(req.body);
   if (valResult.error) {
     valResult.error.code = 400;

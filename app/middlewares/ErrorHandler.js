@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-module.exports = (err, res, next) => {
+module.exports = (err, res = null, next = null) => {
   if (!err.code) {
-    err.code = 401;
+    err.code = 502;
     err.message = "Database Error";
   }
   res.status(err.code).json({
