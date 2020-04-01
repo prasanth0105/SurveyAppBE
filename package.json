@@ -32,8 +32,6 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.9.6",
-    "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2"
   },
   "devDependencies": {
@@ -48,6 +46,8 @@
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.2.3",
     "lint-staged": "^10.1.0",
+    "mongoose": "^5.9.6",
+    "node-fetch": "^2.6.0",
     "protractor-cucumber-framework": "^6.2.1"
   }
 }
