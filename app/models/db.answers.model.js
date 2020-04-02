@@ -20,6 +20,10 @@ const AnswerSchema = new Schema({
   option_label: {
     type: String,
     required: [true, "Require a label for every option"]
+  },
+  option_count: {
+    type: Number,
+    default: 0
   }
 });
 

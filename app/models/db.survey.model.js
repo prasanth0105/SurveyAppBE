@@ -16,7 +16,15 @@ const SurveySchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: "question"
     }
-  ]
+  ],
+  invited: {
+    type: Number,
+    default: 0
+  },
+  attended: {
+    type: String,
+    default: 0
+  }
 });
 
 const Survey = mongoose.model("survey", SurveySchema);
