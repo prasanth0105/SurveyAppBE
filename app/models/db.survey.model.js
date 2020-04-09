@@ -11,19 +11,12 @@ const SurveySchema = new Schema({
     type: String,
     required: [true, "Survey Name must be provided"]
   },
-  question_set: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "question"
-    }
-  ],
-  invited: {
-    type: Number,
-    default: 0
+  survey_description: {
+    type: String
   },
-  attended: {
-    type: String,
-    default: 0
+  survey_published: {
+    type: Boolean,
+    default: false
   }
 });
 

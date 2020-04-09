@@ -9,14 +9,13 @@ const QuestionSchema = new Schema({
   },
   question: {
     type: String,
-    required: [true, "There should be question!!"]
+    required: [true, "Question Required"]
   },
-  answers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "answer"
-    }
-  ]
+  question_type: {
+    type: String,
+    enum: ["CHECK_BOX", "RADIO_BUTTON", "TEXT_BOX", "DROP_DOWN"],
+    required: [true, "Invalid Option Type"]
+  }
 });
 
 const Question = mongoose.model("question", QuestionSchema);
