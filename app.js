@@ -1,3 +1,4 @@
+
 /* eslint-disable no-console */
 const express = require("express");
 const mongoose = require("mongoose");
@@ -5,7 +6,10 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const routes = require("./app/controllers/survey.controller");
 const errorHandler = require("./app/middlewares/errorHandler");
+
 const app = express();
+mongoose.connect('mongodb://localhost/RoleMngmt');
+mongoose.Promise=global.Promise;
 
 require("dotenv").config();
 require("./app/services/mongo.service");
