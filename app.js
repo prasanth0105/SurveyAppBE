@@ -1,22 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser= require('body-parser');
-const mongoose= require('mongoose');
-const routes= require('./app/controllers/role.controller');
+/* eslint-disable no-console */
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const routes = require("./app/controllers/role.controller");
+const errorHandler = require("./app/middlewares/errorHandlers/errorHandler");
 
 const app = express();
-mongoose.connect('mongodb://localhost/RoleMngmt');
-mongoose.Promise=global.Promise;
+require("dotenv").config();
+require("./app/services/mongo.service");
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(routes);
-app.use(function(err,req,res,next){
-    console.log("ERROR!"+err.message);
-    res.status(422).send({error: err.message });
+app.use((err, _req, res, next) => errorHandler(err, res, next));
+
+app.on( "ready", () => {
+  app.listen(process.env.PORT, () => {
+    console.log("Listening for Requests");
+  });
 });
-
-
-app.listen(4000, (req,res,next) => {
-  console.log('Listening for Requests');
+mongoose.connection.once("open", () => {
+  app.emit("ready");
 });

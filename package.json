@@ -4,7 +4,20 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cucumber.js.cmd test/survey.controller.api.test/features -r test/survey.controller.api.test/steps",
+    "lint": "eslint .",
+    "precommit": "lint-staged"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -14,10 +27,30 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "cors": "^2.8.5",
     "body-parser": "^1.19.0",
+    "chai": "^3.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.9.6",
-    "nodemon": "^2.0.2"
+    "mongoose-transactions": "^1.1.4",
+    "nodemon": "^2.0.2",
+    "promise": "^8.1.0",
+    "transactions": "^1.1.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "cucumber": "^2.3.1",
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.0",
+    "mongoose": "^5.9.7",
+    "node-fetch": "^2.6.0",
+    "protractor-cucumber-framework": "^6.2.1"
   }
 }

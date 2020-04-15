@@ -3,7 +3,6 @@
 // mongoose.set('useCreateIndex', true);
 // const Schemas = mongoose.Schema;
 
-
 // const adminSchema = new Schemas({
 //   adminName: {
 //     type: String,
@@ -16,6 +15,5 @@
 //     unique: true,
 //   },
 // });
-
 
 // module.exports = mongoose.model('admins', adminSchema);
