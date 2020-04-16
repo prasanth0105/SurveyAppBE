@@ -7,7 +7,7 @@ const Question = require("../models/db.Survey.Question.model");
 const Option = require("../models/db.Question.Option.model");
 // const SurveyResponse = require("../models/db.Survey.Response.model");
 const SurveyInvitationDetails = require("../models/db.Survey.InvitationDetails.model");
-const joi = require("../middlewares/joi");
+const joi = require("../middlewares/validators/joi");
 
 const viewSurveys = async (_req, res, next) => {
   try {

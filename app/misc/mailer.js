@@ -1,9 +1,10 @@
 const nodemailer = require('nodemailer');
+require("dotenv").config();
 const transport = nodemailer.createTransport({
     service: 'Mailgun',
     auth: {
-        user: 'postmaster@sandbox769574dbfb90412191868b22e311f207.mailgun.org',
-        pass: '721baca1c7009c27f8a83442804e273f-46ac6b00-371725f9'
+        user: process.env.USERNAME,
+        pass: process.env.PASSWORD
     },
     tls: {
         rejectUnauthorized: false

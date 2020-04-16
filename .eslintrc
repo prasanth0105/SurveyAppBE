@@ -1,43 +1,43 @@
 {
-  "root": true,
-  "extends": "google",
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 6,
-    "ecmaFeatures": {
-    "experimentalObjectRestSpread": true
+    "root": true,
+    "extends": "google",
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 6,
+      "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+    },
+    "rules": {
+      "indent": [2, 2, { "SwitchCase": 1 }],
+      "linebreak-style": [2, "unix"],
+      "semi": [2, "always"],
+      "no-console": [2, { "allow": ["warn", "error"] }],
+      "space-before-function-paren": 0,
+      "arrow-body-style": 0,
+      "class-methods-use-this": 0,
+      "comma-dangle": [2, "never"],
+      "consistent-return": 0,
+      "func-names": 2,
+      "global-require": 0,
+      "max-len": 0,
+      "no-confusing-arrow": 0,
+      "no-mixed-operators": 0,
+      "no-nested-ternary": 0,
+      "no-param-reassign": 0,
+      "no-plusplus": 0,
+      "no-shadow": 0,
+      "no-underscore-dangle": 0,
+      "quotes": [
+        2,
+        "double",
+        { "avoidEscape": true, "allowTemplateLiterals": true }
+      ]
+    },
+    "env": {
+      "node": true,
+      "es6": true,
+      "jest": true
+    }
   }
-  },
-  "rules": {
-    "indent": [2, 2, { "SwitchCase": 1 }],
-    "linebreak-style": [2, "unix"],
-    "semi": [2, "always"],
-    "no-console": [2, { "allow": ["warn", "error"] }],
-    "space-before-function-paren": 0,
-    "arrow-body-style": 0,
-    "class-methods-use-this": 0,
-    "comma-dangle": [2, "never"],
-    "consistent-return": 0,
-    "func-names": 2,
-    "global-require": 0,
-    "max-len": 0,
-    "no-confusing-arrow": 0,
-    "no-mixed-operators": 0,
-    "no-nested-ternary": 0,
-    "no-param-reassign": 0,
-    "no-plusplus": 0,
-    "no-shadow": 0,
-    "no-underscore-dangle": 0,
-    "quotes": [
-      2,
-      "double",
-      { "avoidEscape": true, "allowTemplateLiterals": true }
-    ]
-  },
-  "env": {
-    "node": true,
-    "es6": true,
-    "jest": true
-  }
-}

@@ -11,8 +11,7 @@ mongoose.connect(
       console.log(err.message);
       process.exit(1);
     } else {
-      console.log("Connected to DATABASE");
+      console.log("Connected to Database");
     }
   }
 );
-
