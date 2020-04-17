@@ -189,12 +189,12 @@ router.post("/verifyToken", verifyToken, (req, res) => {
   });
 });
 // verify api
-const verifyData=(req, res, next)=> {
+const verifyData = (req, res, next) => {
   const item = {
     active: "true",
     secretToken: ""
   };
-  User.updateOne({secretToken: req.body.secretToken}, {$set: item}, (err, users)=> {
+  User.updateOne({secretToken: req.body.secretToken}, {$set: item}, (err, users) => {
     if (err) {
       res.send("user not found");
     } else {
