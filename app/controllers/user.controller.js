@@ -9,7 +9,7 @@ const User = require("../models/userschema");
 const UserRole = require("../models/user-role-mapping");
 const Transaction = require("mongoose-transactions");
 const transaction = new Transaction();
-const transport = require('../../misc/mailer');
+const transport = require("../../misc/mailer");
 const joi = require("../middlewares/validators/joi");
 const randomString = require("randomstring");
 const jwt = require("jsonwebtoken");
@@ -20,16 +20,16 @@ const addAdmin = async (req, res, next) => {
     bcrypt.hash(req.body.password, salt, async (_err, hash) => {
       req.body.password = hash;
       try {
-        const adminId = transaction.insert("user", { username: req.body.username, email: req.body.email, password: hash });
-        const adminRoleId = transaction.insert("userrole", { user_id: adminId });
+        const adminId = transaction.insert("user", {username: req.body.username, email: req.body.email, password: hash});
+        const adminRoleId = transaction.insert("userrole", {user_id: adminId});
         if (adminRoleId) {
-          await Role.findOne({ role_id: "1" })
+          await Role.findOne({role_id: "1"})
             .then((fetchRole) => {
               transaction.update(
                 "userrole",
                 adminRoleId,
-                { $push: { role_id: fetchRole._id } },
-                { new: true }
+                {$push: {role_id: fetchRole._id}},
+                {new: true}
               );
             });
         }
@@ -39,7 +39,7 @@ const addAdmin = async (req, res, next) => {
       } catch (error) {
         transaction.rollback();
         transaction.clean();
-        next({ code: 422, message: "Admin creation failed" });
+        next({code: 422, message: "Admin creation failed"});
       }
     });
   });
@@ -66,8 +66,8 @@ const registerData = async (req, res, next) => {
       bcrypt.hash(newUser.password, salt, async (_err, hash) => {
         newUser.password = hash;
         try {
-          const userId = transaction.insert("user", { username: req.body.username, email: req.body.email, password: newUser.password, secretToken: newUser.secretToken, active: newUser.active });
-          const userRoleId = transaction.insert("userrole", { user_id: userId });
+          const userId = transaction.insert("user", {username: req.body.username, email: req.body.email, password: newUser.password, secretToken: newUser.secretToken, active: newUser.active});
+          const userRoleId = transaction.insert("userrole", {user_id: userId});
           // Compose email
           const html = `Hi there
           <br/>
@@ -79,23 +79,22 @@ const registerData = async (req, res, next) => {
           <br/>On the following page:
           <a href="http://localhost:8080/verify">http://localhost:8080/verify</a>
           <br/>
-          Have a nice day.`
-          //Send email
+          Have a nice day.`;
+          // Send email
           transport.sendMail({
             from: "sitharakm17@gmail.com",
             to: newUser.email,
             subject: "Please verify your email",
             html: html
-          })
-          console.log("please check your email");
+          });
           if (userRoleId) {
-            await Role.findOne({ role_id: "2" })
+            await Role.findOne({role_id: "2"})
               .then((fetchRole) => {
                 transaction.update(
                   "userrole",
                   userRoleId,
-                  { $push: { role_id: fetchRole._id } },
-                  { new: true }
+                  {$push: {role_id: fetchRole._id}},
+                  {new: true}
                 );
               });
           }
@@ -105,12 +104,11 @@ const registerData = async (req, res, next) => {
         } catch (error) {
           transaction.rollback();
           transaction.clean();
-          next({ code: 422, message: "User creation failed" });
+          next({code: 422, message: "User creation failed"});
         }
       });
     });
-  }
-  else {
+  } else {
     res.send("passwords not matching");
   }
 };
@@ -130,18 +128,18 @@ const viewUserRoles = (_req, res, _next) => {
 
 // login api
 const loginData = (req, res, _next) => {
-  User.find({ email: req.body.email }, (_err, users) => {
+  User.find({email: req.body.email}, (_err, users) => {
     if (!users || !users.length) {
       res.send("invalid email");
     }
     if (!users[0].active) {
-      res.send('Sorry you have to validate email');
+      res.send("Sorry you have to validate email");
     }
     bcrypt.compare(req.body.password, users[0].password, (_err, token) => {
       if (token) {
-        UserRole.findOne({ user_id: users[0]._id }).then((userroles) => {
+        UserRole.findOne({user_id: users[0]._id}).then((userroles) => {
           const userRoleId = userroles.role_id;
-          RolePerm.find({ role_id: userRoleId }).then((userperms) => {
+          RolePerm.find({role_id: userRoleId}).then((userperms) => {
             const userPermId = userperms[0].perm_id;
             const Authtoken = jwt.sign({
               username: users[0].username,
@@ -149,10 +147,10 @@ const loginData = (req, res, _next) => {
               userId: users[0]._id,
               permId: userPermId
             },
-              "secretKEY",
-              {
-                expiresIn: "24h"
-              }
+            "secretKEY",
+            {
+              expiresIn: "24h"
+            }
             );
             res.status(200).json({
               message: "Auth success",
@@ -190,20 +188,19 @@ router.post("/verifyToken", verifyToken, (req, res) => {
   });
 });
 // verify api
-function verifyData(req, res, next) {
-  var item = {
+const verifyData = (req, res, next) => {
+  const item = {
     active: "true",
     secretToken: ""
-  }
-  User.updateOne({ secretToken: req.body.secretToken }, { $set: item }, function (err, users) {
+  };
+  User.updateOne({secretToken: req.body.secretToken}, {$set: item}, (err, users) => {
     if (err) {
-      res.send('user not found');
-    }
-    else {
-      res.send('you may login now');
+      res.send("user not found");
+    } else {
+      res.send("you may login now");
     }
   });
-}
+};
 router.post("/newUser", (req, res, next) => addAdmin(req, res, next));
 router.post("/register", joi.validator(joi.registerInfo), (req, res, next) => registerData(req, res, next));
 router.post("/login", joi.validator(joi.loginInfo), (req, res, next) => loginData(req, res, next));
