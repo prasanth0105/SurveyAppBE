@@ -14,13 +14,11 @@ require("dotenv").config();
 require("./app/services/mongo.service");
 
 
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(roles, users);
 app.use(routes);
 app.use((err, _req, res, next) => errorHandler(err, res, next));
-
 
 
 app.on("ready", () => {

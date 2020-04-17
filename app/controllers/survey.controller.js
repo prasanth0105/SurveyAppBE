@@ -8,6 +8,7 @@ const Option = require("../models/db.Question.Option.model");
 // const SurveyResponse = require("../models/db.Survey.Response.model");
 const SurveyInvitationDetails = require("../models/db.Survey.InvitationDetails.model");
 const joi = require("../middlewares/validators/joi");
+const validateToken= require("../middlewares/validators/tokenvalidator").validateToken;
 
 const viewSurveys = async (_req, res, next) => {
   try {
@@ -122,19 +123,19 @@ const getInvitationInfo = async (req, res, next) => {
 //   }
 // };
 
-router.get("/surveys", (req, res, next) => viewSurveys(req, res, next));
+router.get("/surveys", validateToken, (req, res, next) => viewSurveys(req, res, next));
 
-router.post("/survey", joi.validator(joi.addSurvey), (req, res, next) => newSurvey(req, res, next));
+router.post("/survey", joi.validator(joi.addSurvey), validateToken, (req, res, next) => newSurvey(req, res, next));
 
-router.post("/survey/invite/:surId", (req, res, next) => newInvitation(req, res, next));
+router.post("/survey/invite/:surId", validateToken, (req, res, next) => newInvitation(req, res, next));
 
-router.get("/survey/invite/:surId", (req, res, next) => getInvitationInfo(req, res, next));
+router.get("/survey/invite/:surId", validateToken, (req, res, next) => getInvitationInfo(req, res, next));
 
-router.post("/survey/:surId", joi.validator(joi.addQuestion), (req, res, next) => newQuestion(req, res, next));
+router.post("/survey/:surId", joi.validator(joi.addQuestion), validateToken, (req, res, next) => newQuestion(req, res, next));
 
-router.post("/survey/:surId/:qId", joi.validator(joi.addOption), (req, res, next) => newOption(req, res, next));
+router.post("/survey/:surId/:qId", joi.validator(joi.addOption), validateToken, (req, res, next) => newOption(req, res, next));
 
-router.get("/survey/:surId", (req, res, next) => viewSurvey(req, res, next));
+router.get("/survey/:surId", validateToken, (req, res, next) => viewSurvey(req, res, next));
 
 
 // router.get("/survey_response/:surId", (req, res, next) => viewSurveyResponses(req, res, next));
