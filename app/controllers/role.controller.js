@@ -7,6 +7,7 @@ const Permission = require("../models/permissionschema");
 const RolePerm = require("../models/role-permission-mapping");
 const Transaction = require("mongoose-transactions");
 const transaction = new Transaction();
+const validateToken= require("../middlewares/validators/tokenvalidator").validateToken;
 
 const viewRoles= (_req, res)=>{
   Role.find().then((roles)=> {
@@ -69,11 +70,11 @@ const addPermissions=async(req, res, _next)=>{
   res.json(await Permission.create(req.body));
 };
 
-router.get("/roles", (req, res, next)=> viewRoles(req, res, next));
-router.post("/roles", (req, res, next)=>addRoles(req, res, next));
-router.put("/roles/:id", (req, res, next)=>editRoles(req, res, next));
-router.delete("/roles/:id", (req, res, next)=>deleteRoles(req, res, next));
-router.get("/permissions", (req, res, next)=> viewPermissions(req, res, next));
-router.get("/roleperms", (req, res, next)=> viewMaps(req, res, next));
-router.post("/permissions", (req, res, next)=> addPermissions(req, res, next));
+router.get("/roles", validateToken, (req, res, next)=> viewRoles(req, res, next));
+router.post("/roles", validateToken, (req, res, next)=>addRoles(req, res, next));
+router.put("/roles/:id", validateToken, (req, res, next)=>editRoles(req, res, next));
+router.delete("/roles/:id", validateToken, (req, res, next)=>deleteRoles(req, res, next));
+router.get("/permissions", validateToken, (req, res, next)=> viewPermissions(req, res, next));
+router.get("/roleperms", validateToken, (req, res, next)=> viewMaps(req, res, next));
+router.post("/permissions", validateToken, (req, res, next)=> addPermissions(req, res, next));
 module.exports = router;

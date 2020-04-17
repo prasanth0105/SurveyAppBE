@@ -9,10 +9,11 @@ const User = require("../models/userschema");
 const UserRole = require("../models/user-role-mapping");
 const Transaction = require("mongoose-transactions");
 const transaction = new Transaction();
-const transport = require("../../misc/mailer");
+const transport = require("../misc/mailer");
 const joi = require("../middlewares/validators/joi");
 const randomString = require("randomstring");
 const jwt = require("jsonwebtoken");
+const validateToken= require("../middlewares/validators/tokenvalidator").validateToken;
 
 // new Admin
 const addAdmin = async (req, res, next) => {
@@ -23,7 +24,7 @@ const addAdmin = async (req, res, next) => {
         const adminId = transaction.insert("user", {username: req.body.username, email: req.body.email, password: hash});
         const adminRoleId = transaction.insert("userrole", {user_id: adminId});
         if (adminRoleId) {
-          await Role.findOne({role_id: "1"})
+          await Role.findOne({role: "admin"})
             .then((fetchRole) => {
               transaction.update(
                 "userrole",
@@ -88,7 +89,7 @@ const registerData = async (req, res, next) => {
             html: html
           });
           if (userRoleId) {
-            await Role.findOne({role_id: "2"})
+            await Role.findOne({role: "user"})
               .then((fetchRole) => {
                 transaction.update(
                   "userrole",
@@ -204,7 +205,7 @@ const verifyData = (req, res, next) => {
 router.post("/newUser", (req, res, next) => addAdmin(req, res, next));
 router.post("/register", joi.validator(joi.registerInfo), (req, res, next) => registerData(req, res, next));
 router.post("/login", joi.validator(joi.loginInfo), (req, res, next) => loginData(req, res, next));
-router.get("/userroles", (req, res, next) => viewUserRoles(req, res, next));
-router.get("/users", (req, res, next) => seeUser(req, res, next));
+router.get("/userroles", validateToken, (req, res, next) => viewUserRoles(req, res, next));
+router.get("/users", validateToken, (req, res, next) => seeUser(req, res, next));
 router.put("/verify", (req, res) => verifyData(req, res));
 module.exports = router;
