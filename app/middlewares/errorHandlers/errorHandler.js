@@ -13,12 +13,12 @@ module.exports = (err, res = null, next = null) => {
     res.status(err.code).json({
       message: err.details[0].message,
       status: true
-    })
+    });
   }
   if (err.code == 409) {
     res.status(409).json({
       message: "username already exist",
       status: true
-    })
+    });
   }
 };
