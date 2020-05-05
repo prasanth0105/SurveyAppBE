@@ -1,5 +1,5 @@
-const UserRole= require("../../models/user-role-mapping");
-const Role= require("../../models/roleschema");
+const UserGroup= require("../../models/user-role-mapping");
+const Group= require("../../models/groupschema");
 const jwt= require("jsonwebtoken");
 // TOKEN FORMAT
 // Authorization: Bearer <access_token>
@@ -18,11 +18,11 @@ module.exports = {
       try {
         result = jwt.verify(req.token, "secretKEY", options);
         req.decoded = result;
-        UserRole.findOne({user_id: result.userId}).then((userrole)=>{
-          const roleId= userrole.role_id;
-          Role.findOne({_id: roleId}).then((role)=>{
-            const roleName= role.role;
-            if (roleName=="admin") {
+        UserGroup.findOne({email: result.email}).then((usergroup)=>{
+          const groupName= usergroup.group;
+          Group.findOne({group: groupName}).then((grp)=>{
+            const userGrp= grp.group;
+            if (userGrp=="admin-group") {
               next();
             } else {
               res.send("access denied");

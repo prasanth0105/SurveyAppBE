@@ -1,16 +1,16 @@
 const mongoose= require("mongoose");
 const Schema= mongoose.Schema;
 
-const UserRoleSchema = new Schema({
-  user_id: {
-    type: Schema.Types.ObjectId,
+const UserGroupSchema = new Schema({
+  email: {
+    type: String,
     ref: "user"
   },
-  role_id: {
-    type: Schema.Types.ObjectId,
-    ref: "role"
+  group: {
+    type: String,
+    ref: "group"
   }
 });
 
-const UserRole= mongoose.model("userrole", UserRoleSchema);
-module.exports=UserRole;
+const UserGroup= mongoose.model("usergroup", UserGroupSchema);
+module.exports=UserGroup;

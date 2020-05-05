@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const def = require("./app/controllers/default-group.controller");
 const roles = require("./app/controllers/role.controller");
 const users = require("./app/controllers/user.controller");
 const routes = require("./app/controllers/survey.controller");
@@ -16,7 +17,7 @@ require("./app/services/mongo.service");
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(roles, users);
+app.use(def, roles, users);
 app.use(routes);
 app.use((err, _req, res, next) => errorHandler(err, res, next));
 
