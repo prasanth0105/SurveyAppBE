@@ -9,6 +9,7 @@ const Option = require("../models/db.Question.Option.model");
 const SurveyInvitationDetails = require("../models/db.Survey.InvitationDetails.model");
 const joi = require("../middlewares/validators/joi");
 const validateToken= require("../middlewares/validators/tokenvalidator").validateToken;
+const validateAdmin= require("../middlewares/validators/tokenvalidator").validateAdmin;
 
 const viewSurveys = async (_req, res, next) => {
   try {
@@ -123,17 +124,17 @@ const getInvitationInfo = async (req, res, next) => {
 //   }
 // };
 
-router.get("/surveys", validateToken, (req, res, next) => viewSurveys(req, res, next));
+router.get("/surveys", validateAdmin, (req, res, next) => viewSurveys(req, res, next));
 
-router.post("/survey", joi.validator(joi.addSurvey), validateToken, (req, res, next) => newSurvey(req, res, next));
+router.post("/survey", joi.validator(joi.addSurvey), validateAdmin, (req, res, next) => newSurvey(req, res, next));
 
-router.post("/survey/invite/:surId", validateToken, (req, res, next) => newInvitation(req, res, next));
+router.post("/survey/invite/:surId", validateAdmin, (req, res, next) => newInvitation(req, res, next));
 
-router.get("/survey/invite/:surId", validateToken, (req, res, next) => getInvitationInfo(req, res, next));
+router.get("/survey/invite/:surId", validateAdmin, (req, res, next) => getInvitationInfo(req, res, next));
 
-router.post("/survey/:surId", joi.validator(joi.addQuestion), validateToken, (req, res, next) => newQuestion(req, res, next));
+router.post("/survey/:surId", joi.validator(joi.addQuestion), validateAdmin, (req, res, next) => newQuestion(req, res, next));
 
-router.post("/survey/:surId/:qId", joi.validator(joi.addOption), validateToken, (req, res, next) => newOption(req, res, next));
+router.post("/survey/:surId/:qId", joi.validator(joi.addOption), validateAdmin, (req, res, next) => newOption(req, res, next));
 
 router.get("/survey/:surId", validateToken, (req, res, next) => viewSurvey(req, res, next));
 
