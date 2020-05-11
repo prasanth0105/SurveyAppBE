@@ -8,6 +8,7 @@ const Option = require("../models/db.Question.Option.model");
 const SurveyInvitationDetails = require("../models/db.Survey.InvitationDetails.model");
 const joi = require("../middlewares/validators/joi");
 const validateToken= require("../middlewares/validators/tokenvalidator").validateToken;
+const validateAdmin= require("../middlewares/validators/tokenvalidator").validateAdmin;
 
 const viewSurveys = async (_req, res, next) => {
   try {
@@ -136,7 +137,7 @@ const deleteOption = async (req, res, next) => {
 };
 
 
-router.get("/surveys", validateToken, (req, res, next) => viewSurveys(req, res, next));
+router.get("/surveys", validateAdmin, (req, res, next) => viewSurveys(req, res, next));
 
 router.post("/new-survey", joi.validator(joi.addSurvey), validateToken, (req, res, next) => newSurvey(req, res, next));
 
