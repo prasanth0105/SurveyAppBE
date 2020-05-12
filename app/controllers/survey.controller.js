@@ -138,29 +138,29 @@ const deleteOption = async (req, res, next) => {
 
 router.get("/surveys", (req, res, next) => viewSurveys(req, res, next));
 
-router.post("/new-survey", (req, res, next) => newSurvey(req, res, next));
+router.post("/new-survey", joi.validator(joi.addSurvey), validateToken, (req, res, next) => newSurvey(req, res, next));
 
-router.get("/view-survey/:surId", (req, res, next) => viewSurvey(req, res, next));
+router.get("/view-survey/:surId", validateToken, (req, res, next) => viewSurvey(req, res, next));
 
-router.put("/edit-survey/:surId", (req, res, next) => editSurvey(req, res, next));
+router.put("/edit-survey/:surId", validateToken, (req, res, next) => editSurvey(req, res, next));
 
-router.post("/survey/to-invite", (req, res, next) => newInvitation(req, res, next));
+router.post("/survey/to-invite", validateToken, (req, res, next) => newInvitation(req, res, next));
 
-router.get("/survey/view-invite/:surId", (req, res, next) => getInvitationInfo(req, res, next));
+router.get("/survey/view-invite/:surId", validateToken, (req, res, next) => getInvitationInfo(req, res, next));
 
-router.post("/survey/new-question", (req, res, next) => newQuestion(req, res, next));
+router.post("/survey/new-question", joi.validator(joi.addQuestion), validateToken, (req, res, next) => newQuestion(req, res, next));
 
-router.put("/survey/edit-question/:qId", (req, res, next) => editQuestion(req, res, next));
+router.put("/survey/edit-question/:qId", validateToken, (req, res, next) => editQuestion(req, res, next));
 
-router.delete("/survey/delete-question/:qId", (req, res, next) => deleteQuestion(req, res, next));
+router.delete("/survey/delete-question/:qId", validateToken, (req, res, next) => deleteQuestion(req, res, next));
 
-router.post("/survey/new-option", (req, res, next) => newOption(req, res, next));
+router.post("/survey/new-option", joi.validator(joi.addOption), validateToken, (req, res, next) => newOption(req, res, next));
 
-router.get("/survey/view-option/:optId", (req, res, next) => viewOption(req, res, next));
+router.get("/survey/view-option/:optId", validateToken, (req, res, next) => viewOption(req, res, next));
 
-router.put("/survey/edit-option/:optId", (req, res, next) => editOption(req, res, next));
+router.put("/survey/edit-option/:optId", validateToken, (req, res, next) => editOption(req, res, next));
 
-router.delete("/survey/delete-option/:optId", (req, res, next) => deleteOption(req, res, next));
+router.delete("/survey/delete-option/:optId", validateToken, (req, res, next) => deleteOption(req, res, next));
 
 
 module.exports = router;
