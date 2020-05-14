@@ -16,10 +16,12 @@ const UserSchema = new Schema({
     required: true
   },
   secretToken: {
-    type: "String"
+    type: "String",
+    default: null
   },
   active: {
-    type: "Boolean"
+    type: "Boolean",
+    default: true
   }
 });
 const User = mongoose.model("user", UserSchema);

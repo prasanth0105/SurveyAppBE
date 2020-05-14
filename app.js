@@ -17,8 +17,8 @@ require("./app/services/mongo.service");
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(def, roles, users);
-app.use(routes);
+app.use(def, users, roles, routes);
+
 app.use((err, _req, res, next) => errorHandler(err, res, next));
 
 

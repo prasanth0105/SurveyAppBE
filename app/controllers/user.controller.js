@@ -34,6 +34,34 @@ const addAdmin=async(req, res, next)=>{
     });
   });
 };
+  // bcrypt.genSalt(10, async (_err, salt) => {
+  //   bcrypt.hash(req.body.password, salt, async (_err, hash) => {
+  //     req.body.password = hash;
+  //     try {
+  //       const adminId = transaction.insert("user", {username: req.body.username, email: req.body.email, password: hash});
+  //       const adminRoleId = transaction.insert("userrole", {user_id: adminId});
+  //       if (adminRoleId) {
+  //         await Role.findOne({role: "admin"})
+  //           .then((fetchRole) => {
+  //             transaction.update(
+  //               "userrole",
+  //               adminRoleId,
+  //               {$push: {role_id: fetchRole._id}},
+  //               {new: true}
+  //             );
+  //           });
+  //       }
+  //       const final = await transaction.run();
+  //       transaction.clean();
+  //       return res.json(final[0]);
+  //     } catch (error) {
+  //       transaction.rollback();
+  //       transaction.clean();
+  //       next({code: 422, message: "Admin creation failed"});
+  //     }
+  //   });
+  // });
+// };
 
 // register api
 const registerData=async (req, res, next)=> {
@@ -199,6 +227,7 @@ const verifyData=(req, res, next)=> {
     }
   });
 };
+
 router.post("/newUser", (req, res, next)=>addAdmin(req, res, next));
 router.post("/register", joi.validator(joiSchema.registerInfo), (req, res, next) => registerData(req, res, next));
 router.post("/login", joi.validator(joiSchema.loginInfo), (req, res, next) => loginData(req, res, next));

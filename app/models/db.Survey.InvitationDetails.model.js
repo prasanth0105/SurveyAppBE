@@ -8,7 +8,8 @@ const SurveyInvitationSchema = new Schema({
     ref: "survey"
   },
   user_id: {
-    type: Number
+    type: Schema.Types.ObjectId,
+    ref: "user"
   }
 }, {timestamps: {createdAt: "invited_at"}});
 
