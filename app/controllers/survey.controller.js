@@ -1,13 +1,17 @@
 /* eslint-disable new-cap */
 const express = require("express");
+// const mongoose = require("mongoose");
 
 const router = express.Router();
+// const db = mongoose.connection;
 const Survey = require("../models/db.Survey.model");
 const Question = require("../models/db.Survey.Question.model");
 const Option = require("../models/db.Question.Option.model");
 const SurveyInvitationDetails = require("../models/db.Survey.InvitationDetails.model");
-const joi = require("../middlewares/validators/joi");
-const validateToken= require("../middlewares/validators/tokenvalidator").validateToken;
+const transport = require("../utils/transporter");
+const inviteMail = require("../utils/invite_mail");
+// const joi = require("../middlewares/validators/joi");
+// const validateToken= require("../middlewares/validators/tokenvalidator").validateToken;
 
 const viewSurveys = async (_req, res, next) => {
   try {
@@ -49,9 +53,47 @@ const viewSurvey = async (req, res, next) => {
   }
 };
 
+// const viewSurvey = async (req, res, next) => {
+//   try {
+//     db.collection("surveys").aggregate([
+//       {
+//         "$lookup": {
+//           "from": "questions",
+//           "let": {"surveyId": "$_id"},
+//           "pipeline": [
+//             {"$match": {"$expr": {"$eq": ["$survey_id", "$$surveyId"]}}},
+//             {"$lookup": {
+//               "from": "options",
+//               "let": {"questionId": "$_id"},
+//               "pipeline": [
+//                 {"$match": {"$expr": {"$eq": ["$question_id", "$$questionId"]}}}
+//               ],
+//               "as": "options"
+//             }}
+//           ],
+//           "as": "questions"
+//         }}
+//     ]).toArray((err, resp)=>{
+//       if (err) throw err;
+//       res.send(resp);
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
 const newInvitation = async (req, res, next) => {
   try {
-    res.json(await SurveyInvitationDetails.create(req.body));
+    mails = [];
+    req.body.forEach((user) => {
+      mails.push(user["email"]);
+      SurveyInvitationDetails.create({
+        user_id: user["userId"],
+        survey_id: req.params.surId
+      });
+    });
+    link="http://localhost:4200/attendSurvey/show/"+ req.params.surId;
+    transport.sendEmail("kmsithara1703@gmail.com", mails, "Survey Invitation", inviteMail.html(link));
   } catch (err) {
     next(err);
   }
@@ -138,29 +180,29 @@ const deleteOption = async (req, res, next) => {
 
 router.get("/surveys", (req, res, next) => viewSurveys(req, res, next));
 
-router.post("/new-survey", joi.validator(joi.addSurvey), validateToken, (req, res, next) => newSurvey(req, res, next));
+router.post("/new-survey", (req, res, next) => newSurvey(req, res, next));
 
-router.get("/view-survey/:surId", validateToken, (req, res, next) => viewSurvey(req, res, next));
+router.get("/view-survey/:surId", (req, res, next) => viewSurvey(req, res, next));
 
-router.put("/edit-survey/:surId", validateToken, (req, res, next) => editSurvey(req, res, next));
+router.put("/edit-survey/:surId", (req, res, next) => editSurvey(req, res, next));
 
-router.post("/survey/to-invite", validateToken, (req, res, next) => newInvitation(req, res, next));
+router.post("/survey/to-invite/:surId", (req, res, next) => newInvitation(req, res, next));
 
-router.get("/survey/view-invite/:surId", validateToken, (req, res, next) => getInvitationInfo(req, res, next));
+router.get("/survey/view-invite/:surId", (req, res, next) => getInvitationInfo(req, res, next));
 
-router.post("/survey/new-question", joi.validator(joi.addQuestion), validateToken, (req, res, next) => newQuestion(req, res, next));
+router.post("/survey/new-question", (req, res, next) => newQuestion(req, res, next));
 
-router.put("/survey/edit-question/:qId", validateToken, (req, res, next) => editQuestion(req, res, next));
+router.put("/survey/edit-question/:qId", (req, res, next) => editQuestion(req, res, next));
 
-router.delete("/survey/delete-question/:qId", validateToken, (req, res, next) => deleteQuestion(req, res, next));
+router.delete("/survey/delete-question/:qId", (req, res, next) => deleteQuestion(req, res, next));
 
-router.post("/survey/new-option", joi.validator(joi.addOption), validateToken, (req, res, next) => newOption(req, res, next));
+router.post("/survey/new-option", (req, res, next) => newOption(req, res, next));
 
-router.get("/survey/view-option/:optId", validateToken, (req, res, next) => viewOption(req, res, next));
+router.get("/survey/view-option/:optId", (req, res, next) => viewOption(req, res, next));
 
-router.put("/survey/edit-option/:optId", validateToken, (req, res, next) => editOption(req, res, next));
+router.put("/survey/edit-option/:optId", (req, res, next) => editOption(req, res, next));
 
-router.delete("/survey/delete-option/:optId", validateToken, (req, res, next) => deleteOption(req, res, next));
+router.delete("/survey/delete-option/:optId", (req, res, next) => deleteOption(req, res, next));
 
 
 module.exports = router;
